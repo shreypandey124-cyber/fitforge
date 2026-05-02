@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FitForge - Personalized Workout Planner",
+  title: "FitForge - Your Personal Workout Planner",
   description: "Generate personalized workout plans based on your biometrics and fitness goals",
 };
 
