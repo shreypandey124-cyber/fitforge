@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function ExerciseCard({ workoutExercise }: Props) {
-  const { exercise, sets, reps, rest, notes } = workoutExercise;
+  const { exercise, sets, reps, rest } = workoutExercise;
   const [expanded, setExpanded] = useState(false);
 
   const getMuscleColor = (muscle: string): string => {

@@ -2,15 +2,11 @@ import {
   UserProfile, 
   WorkoutDay, 
   WeeklyPlan, 
-  WorkoutExercise, 
+  WorkoutExercise,
   Exercise 
 } from '@/types';
-import { exercises, getExerciseById } from './exercises';
-import { getGoalById, getSubCategory } from './goals';
-
-interface WorkoutParams {
-  profile: UserProfile;
-}
+import { getExerciseById } from './exercises';
+import { getGoalById } from './goals';
 
 interface ExerciseSelection {
   primary: string[];
@@ -121,7 +117,8 @@ function getWorkoutParams(profile: UserProfile): {
   };
 }
 
-function getExerciseSelection(goal: string, subGoal: string): ExerciseSelection {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getExerciseSelection(goal: string, _subGoal: string): ExerciseSelection {
   // Exercise pools for different goals
   const muscleGroups = {
     chest: ['bench-press', 'incline-bench', 'push-ups', 'dumbbell-fly', 'cable-crossover'],

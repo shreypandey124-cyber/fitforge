@@ -22,44 +22,35 @@ const defaultProfile: Partial<UserProfile> = {
   subGoal: ''
 };
 
-function loadFromStorage() {
-  if (typeof window === 'undefined') return null;
+function getInitialData(): { profile: Partial<UserProfile>; weeklyPlan: WeeklyPlan | null; step: Step } {
+  if (typeof window === 'undefined') {
+    return { profile: defaultProfile, weeklyPlan: null, step: 'biometrics' };
+  }
   try {
-    const p = localStorage.getItem('fitforge-profile');
-    const w = localStorage.getItem('fitforge-plan');
-    return {
-      profile: p ? JSON.parse(p) : null,
-      weeklyPlan: w ? JSON.parse(w) : null
-    };
+    const stored = localStorage.getItem('fitforge-profile');
+    const storedPlan = localStorage.getItem('fitforge-plan');
+    const profile = stored ? JSON.parse(stored) : defaultProfile;
+    const weeklyPlan = storedPlan ? JSON.parse(storedPlan) : null;
+    const step: Step = weeklyPlan ? 'plan' : 'biometrics';
+    return { profile, weeklyPlan, step };
   } catch {
-    return null;
+    return { profile: defaultProfile, weeklyPlan: null, step: 'biometrics' };
   }
 }
 
 export default function Home() {
-  const [step, setStep] = useState<Step>('biometrics');
-  const [profile, setProfile] = useState<Partial<UserProfile>>(defaultProfile);
-  const [weeklyPlan, setWeeklyPlan] = useState<WeeklyPlan | null>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  // Client-side only load
-  if (!loaded) {
-    const stored = loadFromStorage();
-    if (stored) {
-      if (stored.profile) setProfile(stored.profile);
-      if (stored.weeklyPlan) {
-        setWeeklyPlan(stored.weeklyPlan);
-        setStep('plan');
-      }
-    }
-    setLoaded(true);
-  }
+  const [initialData] = useState(getInitialData);
+  const [step, setStep] = useState<Step>(initialData.step);
+  const [profile, setProfile] = useState<Partial<UserProfile>>(initialData.profile);
+  const [weeklyPlan, setWeeklyPlan] = useState<WeeklyPlan | null>(initialData.weeklyPlan);
 
   const handleProfileUpdate = (updates: Partial<UserProfile>) => {
     const newProfile = { ...profile, ...updates };
     setProfile(newProfile);
-    if (typeof window !== 'undefined') {
+    try {
       localStorage.setItem('fitforge-profile', JSON.stringify(newProfile));
+    } catch {
+      // localStorage not available
     }
   };
 

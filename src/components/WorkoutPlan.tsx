@@ -1,7 +1,7 @@
 'use client';
 
 import { UserProfile, WeeklyPlan } from '@/types';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import styles from './WorkoutPlan.module.css';
 import ExerciseCard from './ExerciseCard';
 
@@ -25,7 +25,8 @@ export default function WorkoutPlan({ profile, weeklyPlan, onRestart }: Props) {
   };
 
   const getGoalTitle = () => {
-    const subGoal = profile.subGoal;
+    const subGoal = profile.subGoal || '';
+    if (!subGoal) return 'Workout';
     return subGoal.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   };
 
